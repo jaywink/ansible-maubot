@@ -1,0 +1,63 @@
+---
+- name: Ensure maubot path
+  file:
+    path: "/data/maubot"
+    state: directory
+
+- name: Template maubot config
+  template:
+    src: config.yaml
+    dest: "/data/maubot/config.yaml"
+  register: _config
+
+- name: Maubot container
+  docker_container:
+    state: started
+    name: "maubot"
+    image: "{{ maubot_docker_image }}"
+    restart_policy: unless-stopped
+    restart: "{{ _config.changed }}"
+    volumes:
+      - "/data/maubot:/data"
+    log_driver: json-file
+    log_options:
+      max-size: "100m"
+    labels: "{{ maubot_docker_labels }}"
+    networks:
+      - name: "{{ maubot_docker_network }}"
+
+- name: Add client if missing
+  when: maubot_client_mxid is defined and maubot_client_access_token is defined
+  block:
+    - name: Install sqlite3
+      apt:
+        name: sqlite3
+        state: present
+
+    - name: Wait until there is a database file available if first run
+      stat:
+        path: /data/maubot/maubot.db
+      register: _stat
+      retries: 10
+      delay: 6
+      until: _stat.stat.exists
+
+    - name: Get existing client details, if any
+      shell: >
+        sqlite3 /data/maubot/maubot.db 'select count(1) from client where id = "{{ maubot_client_mxid }}";'
+      register: _select
+
+    - name: Insert client
+      when: _select.stdout == "0"
+      register: _sqlite
+      shell: >
+        sqlite3 /data/maubot/maubot.db 'insert into client (id, homeserver, access_token, enabled, autojoin,
+          displayname, avatar_url, device_id, next_batch, filter_id, sync)
+          values
+          ("{{ maubot_client_mxid }}", "{{ maubot_homeserver_url }}", "{{ maubot_client_access_token }}",
+          1, 1, "{{ maubot_client_displayname | default('Maubot') }}", "{{ maubot_client_avatar_url | default('') }}",
+          "{{ maubot_client_device_id | default('') }}", "", "", 1);'
+
+    - name: Restart container
+      when: _select.stdout == "0" and _sqlite.changed
+      shell: docker restart maubot
