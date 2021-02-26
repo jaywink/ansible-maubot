@@ -8,6 +8,8 @@ Maubot CLI commands.
 
 Traefik friendly via Docker container labels.
 
+This repository is also mirrored on GitHub at https://github.com/jaywink/ansible-maubot
+
 ## Installing
 
 `ansible-galaxy install jaywink.ansible_maubot`
