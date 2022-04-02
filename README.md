@@ -48,8 +48,7 @@ These defaults will be used if not set.
 
 ```yaml
 maubot_admin_username: admin
-# While this is a custom build, any upstream builds also work
-maubot_docker_image: jaywink/maubot:v0.1.2
+maubot_docker_image: dock.mau.dev/maubot/maubot:v0.3.1
 # Use for example to hook up with Traefik
 maubot_docker_labels: []
 # Docker network to attach to
