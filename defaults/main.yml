@@ -1,13 +1,12 @@
 ---
 # Optional, defaults here
 maubot_admin_username: admin
-maubot_docker_image: dock.mau.dev/maubot/maubot:v0.3.1
+maubot_docker_image: dock.mau.dev/maubot/maubot:v0.4.1
 # Use for example to hook up with Traefik
 maubot_docker_labels: []
 # Docker network to attach to
 maubot_docker_network: default
-# Paths for the management page and API
-maubot_server_base_path: "/maubot/api/v1"
+# Paths for the management page and plugins
 maubot_server_ui_base_path: "/maubot"
 maubot_server_plugin_base_path: "/maubot/plugin/"
 
