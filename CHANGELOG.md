@@ -2,6 +2,10 @@
 
 Version numbers correspond to Maubot version numbers in compatibility.
 
+## unreleased
+
+Added `maubot_docker_restart_policy` config option.
+
 ## v0.4.1
 
 **Breaking change**. Maubot has removed the possibility to override the API base path,

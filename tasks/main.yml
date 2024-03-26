@@ -15,7 +15,7 @@
     state: started
     name: "maubot"
     image: "{{ maubot_docker_image }}"
-    restart_policy: unless-stopped
+    restart_policy: "{{ maubot_docker_restart_policy }}"
     restart: "{{ _config.changed }}"
     volumes:
       - "/data/maubot:/data"
