@@ -48,7 +48,7 @@ These defaults will be used if not set.
 
 ```yaml
 maubot_admin_username: admin
-maubot_docker_image: dock.mau.dev/maubot/maubot:v0.4.1
+maubot_docker_image: dock.mau.dev/maubot/maubot:v0.5.0
 # Use for example to hook up with Traefik
 maubot_docker_labels: []
 # Docker network to attach to
